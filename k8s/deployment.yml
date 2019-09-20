@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: parse-server-namespace
+  name: parse-server-deployment
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: parse-server
+  template:
+    metadata:
+      labels:
+        app: parse-server
+    spec:
+      containers:
+      - name: parse-server-ap-appp
+        image: viksharma001/parse-server:v1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 1337
+        envFrom:
+          - configMapRef:
+              name: parse-server-configmap
+        livenessProbe:
+            httpGet:
+              path: /parse/health
+              port: 1337
+            initialDelaySeconds: 60
+            periodSeconds: 5
