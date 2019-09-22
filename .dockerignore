@@ -3,7 +3,6 @@ Dockerfile
 .gitignore
 env.*
 ./CODE_OF_CONDUCT.md
-./cloud
 ./helm-chart
 ./k8s
 ./Jenkinsfile
