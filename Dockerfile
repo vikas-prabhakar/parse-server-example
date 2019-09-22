@@ -25,6 +25,5 @@ FROM base AS release
 COPY --from=dependencies /parse/prod_node_modules ./node_modules
 COPY . .
 EXPOSE 1337
-
-
+USER node
 CMD [ "npm", "start" ]
