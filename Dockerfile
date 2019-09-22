@@ -1,26 +1,30 @@
-FROM node:latest
+FROM alpine:3.10  AS base
+RUN apk --no-cache add nodejs nodejs-npm tini  --virtual native-deps \
+  g++ gcc libgcc libstdc++ linux-headers autoconf automake make nasm python git && \
+  npm install --quiet node-gyp -g
 
-RUN mkdir parse
-
-ADD . /parse
 WORKDIR /parse
+ENTRYPOINT ["/sbin/tini", "--"]
+COPY package.json .
+
+
+FROM base AS dependencies
+RUN npm set progress=false && npm config set depth 0
+RUN npm install --only=production 
+RUN cp -R node_modules prod_node_modules
 RUN npm install
 
-ENV APP_ID setYourAppId
-ENV MASTER_KEY setYourMasterKey
-ENV DATABASE_URI setMongoDBURI
 
-# Optional (default : 'parse/cloud/main.js')
-# ENV CLOUD_CODE_MAIN cloudCodePath
 
-# Optional (default : '/parse')
-# ENV PARSE_MOUNT mountPath
+#FROM dependencies AS test
+#COPY . .
+#RUN  npm run lint && npm run setup && npm run test
 
+
+FROM base AS release
+COPY --from=dependencies /parse/prod_node_modules ./node_modules
+COPY . .
 EXPOSE 1337
 
-# Uncomment if you want to access cloud code outside of your container
-# A main.js file must be present, if not Parse will not start
-
-# VOLUME /parse/cloud               
 
 CMD [ "npm", "start" ]
