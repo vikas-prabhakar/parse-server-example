@@ -9,6 +9,8 @@ properties([
         string(defaultValue: "v1", description: 'Which image tag?', name: 'IMAGE_TAG'),
         string(defaultValue: "/Users/vikasdeepsharma/.kube/config", description: 'Which path of ~/.kube/config', name: 'CONFIGPATH'),
         string(defaultValue: "parse-server-namespace", description: 'Namepsace for parse-server resources', name: 'NAMESPACE'),
+        string(defaultValue: "parse-serve", description: 'Root passphrase of DCTs', name: 'DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE'),
+        string(defaultValue: "parse-serve", description: 'Repository passphrase of DCTs', name: 'DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE'),
 
 	])
 ])
@@ -33,10 +35,13 @@ finalImage = docker.build("${registry}:${IMAGE_TAG}",'.')
 }
   stage ('Push to Dockerhub') {
 
+         withEnv(['DOCKER_CONTENT_TRUST=1','DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE=$DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE','DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE=$DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE']){
           docker.withRegistry('',registryCredential) {
             finalImage.push()
           }
-        } 
+      }
+   } 
+
 
     stage('Remove Unused docker image') {
         node('master'){
