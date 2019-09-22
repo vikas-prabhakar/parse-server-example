@@ -21,6 +21,7 @@ RUN npm install --only=production && npm audit fix
 
 FROM node:12.10.0-alpine  AS release
 COPY --from=dependencies /parse/node_modules  ./node_modules
+RUN mkdir -p logs && chown -R node: logs
 COPY . .
 EXPOSE 1337
 USER node
