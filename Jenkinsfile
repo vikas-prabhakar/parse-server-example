@@ -9,8 +9,8 @@ properties([
         string(defaultValue: "v1", description: 'Which image tag?', name: 'IMAGE_TAG'),
         string(defaultValue: "/Users/vikasdeepsharma/.kube/config", description: 'Which path of ~/.kube/config', name: 'CONFIGPATH'),
         string(defaultValue: "parse-server-namespace", description: 'Namepsace for parse-server resources', name: 'NAMESPACE'),
-        string(defaultValue: "parse-serve", description: 'Root passphrase of DCTs', name: 'DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE'),
-        string(defaultValue: "parse-serve", description: 'Repository passphrase of DCTs', name: 'DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE'),
+        string(defaultValue: "parse-server", description: 'Root passphrase of DCTs', name: 'DOCKER_CONTENT_TRUST_ROOT_PASSPHRASE'),
+        string(defaultValue: "parse-server", description: 'Repository passphrase of DCTs', name: 'DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE'),
 
 	])
 ])
