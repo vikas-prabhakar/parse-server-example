@@ -1,0 +1,73 @@
+grafana:
+  image:
+    repository: k8s.gcr.io/heapster-grafana-amd64
+    tag: v5.0.4
+    pullPolicy: IfNotPresent
+    port: 3000
+
+  service:
+    type: LoadBalancer
+    port: 3000
+
+  replicaCount: 1
+
+sidecar:
+  image: kiwigrid/k8s-sidecar:0.1.20
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 50m
+      memory: 50Mi
+
+  skipTlsVerify: false
+
+  datasources:
+    enabled: false
+    label: grafana_datasource
+    searchNamespace: null
+
+  dashboards:
+    enabled: false
+    provider:
+      name: sidecarProvider
+      orgid: 1
+      folder: ''
+      type: file
+      disableDelete: false
+    folder: /var/lib/grafana/dashboards/default
+    defaultFolderName: null
+initChownData:
+  enabled: false
+  image:
+    repository: busybox
+    tag: "1.30"
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+downloadDashboardsImage:
+  repository: appropriate/curl
+  tag: latest
+  pullPolicy: IfNotPresent
+dashboards: {}
+
+downloadDashboards:
+  env: {}
+
+securityContext:
+  runAsUser: 472
+  fsGroup: 472
+
+serviceAccount:
+  name: grafana
+
+persistence:
+  enabled: false
