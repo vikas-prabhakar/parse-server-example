@@ -38,20 +38,36 @@ efk:
       tag: 6.4.3
       pullPolicy: IfNotPresent
 
-
-      resources:
-        limits:
-          cpu: 1000m
-        requests:
-          cpu: 100m
     env:
       zendiscovery: "es-cluster-0.elasticsearch"
       minimummasternodes: "1"
       ESJAVAOPTS: "-Xms512m -Xmx512m"
-
+    resources:
+      limits:
+        cpu: "1000m"
+      requests:
+        cpu: "100m"
 
 
 
   provisioner:
     provisioner: kubernetes.io/no-provisioner
     volumeBindingMode: WaitForFirstConsumer
+
+
+  kibana:
+    name: kibana
+    replicas: 1
+    Image:
+      repository: docker.elastic.co/kibana/kibana-oss
+      tag: 6.4.3
+      pullPolicy: IfNotPresent
+      port: 5601
+    type: LoadBalancer
+
+    resources:
+      limits:
+        cpu: "1000m"
+      requests:
+        cpu: "100m"
+    esendoint: "http://elasticsearch:9200"

@@ -36,7 +36,7 @@ spec:
       - name: elasticsearch
         image: "{{ .Values.efk.es.Image.repository }}:{{ .Values.efk.es.Image.tag }}"
         resources:
-        {{ toYaml .Values.efk.es.resources | indent 12 }}
+{{ toYaml .Values.efk.es.resources | indent 12 }}
         ports:
         - containerPort: 9200
           name: rest
@@ -57,9 +57,9 @@ spec:
           - name: discovery.zen.ping.unicast.hosts
             value: "{{ .Values.efk.es.zendiscovery }}"
           - name: discovery.zen.minimum_master_nodes
-            value: "{{ .Values.efk.es.minimummasternodes }}"
+            value: "{{ .Values.efk.es.env.minimummasternodes }}"
           - name: ES_JAVA_OPTS
-            value: "{{ .Values.efk.es.ESJAVAOPTS }}"
+            value: "{{ .Values.efk.es.env.ESJAVAOPTS }}"
   volumeClaimTemplates:
   - metadata:
       name: data
